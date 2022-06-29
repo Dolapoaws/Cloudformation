@@ -1,0 +1,64 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "",
+    "Metadata": {
+
+    },
+    "Parameters": {
+      "aaronVPCCIDR": {
+          "Description": "provide cidr for your VPC",
+          "Type": "String"
+
+      },
+      "aaronSUBNET1CIDR": {
+          "Description": "provide cidr for your subnet1",
+          "Type": "String"
+      },
+      "AZSUBNET1": {
+          "Description": "pick AZ for your subnet1",
+          "Type": "AWS::EC2::AvailabilityZone::Name"
+      }
+
+    },
+    "Mappings": {
+
+    },
+    "Conditions": {
+
+    },
+    "Resources": {
+      "aaronVPC": {
+        "Type": "AWS::EC2::VPC",
+        "Properties": {
+          "CidrBlock": { "Ref": "aaronVPCCIDR" },
+          "Tags": [{ "Key": "Name", "Value":  "aaronVPC" }]
+        }
+      },
+      "aaronIGW": {
+        "Type": "AWS::EC2::InternetGateway",
+        "Properties": {
+          "Tags": [{ "Key": "Name", "Value":  "aaronIGW" }]
+        }
+      },
+      "AttachGateway": {
+        "Type": "AWS::EC2::VPCGatewayAttachment",
+        "Properties": {
+          "VpcId": { "Ref": "aaronVPC" },
+          "InternetGatewayId": { "Ref": "aaronIGW" }
+        }
+      },
+      "aaronSUBNET1": {
+        "Type": "AWS::EC2::Subnet",
+        "Properties": {
+          "AvailabilityZone": { "Ref": "AZSUBNET1" },
+          "VpcId": { "Ref": "aaronVPC" },
+          "CidrBlock": { "Ref": "aaronSUBNET1CIDR" },
+          "Tags": [{ "Key": "Name", "Value":  "aaronSUBNET1" }]
+        }
+      }
+
+    },
+    "Outputs": {
+
+    }
+}
