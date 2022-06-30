@@ -1,0 +1,186 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "This template provisions the network and web proxy infrastructure for the Ovid Application",
+  "Metadata": {
+
+  },
+  "Parameters": {
+    "jjtechvpcCIDR": {
+        "Description": "vpc CidrBlock",
+        "Type": "String"
+    },
+    "jjtechPubSNcidr": {
+        "Description": "cidr of your public subnet",
+        "Type": "String"
+    },
+    "jjtechPrvtSNcidr": {
+        "Description": "cidr of your private subnet",
+        "Type": "String"
+    },
+    "jjtechPublicSubnetAZ": {
+        "Description": "AZ for public SN ",
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+    },
+    "jjtechPrvtSnAZ": {
+        "Description": "AZ for private SN ",
+        "Type": "AWS::EC2::AvailabilityZone::Name"
+    },
+    "jjtechPubRTrouteDestinationCidrBlock": {
+        "Description": "Provide DestinationCidrBlock",
+        "Type": "String"
+      },
+      "jjtechEC2InstanceTypePARA": {
+          "Description": "Provide instance type from the allowed values",
+          "Type": "String",
+          "AllowedValues":[
+            "t2.nano",
+            "t2.micro",
+            "t2.small",
+            "t1.micro"
+          ]
+      }
+    },
+
+  "Mappings": {
+
+  },
+  "Conditions": {
+
+  },
+  "Resources": {
+    "jjtechVPC": {
+      "Type": "AWS::EC2::VPC",
+      "Properties": {
+        "CidrBlock": { "Ref": "jjtechvpcCIDR" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechVPC" }]
+      }
+    },
+    "jjtechIGW": {
+      "Type": "AWS::EC2::InternetGateway",
+      "Properties": {
+        "Tags": [{ "Key": "Name", "Value":  "jjtechIGW" }]
+      }
+    },
+    "AttachGateway": {
+      "Type": "AWS::EC2::VPCGatewayAttachment",
+      "Properties": {
+        "VpcId": { "Ref": "jjtechVPC" },
+        "InternetGatewayId": { "Ref": "jjtechIGW" }
+      }
+    },
+    "jjtechPubSN": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": { "Ref": "jjtechPublicSubnetAZ" },
+        "VpcId": { "Ref": "jjtechVPC" },
+        "CidrBlock": { "Ref": "jjtechPubSNcidr" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechPubSN" }]
+      }
+    },
+    "jjtechPrvtSN": {
+      "Type": "AWS::EC2::Subnet",
+      "Properties": {
+        "AvailabilityZone": { "Ref": "jjtechPrvtSnAZ" },
+        "VpcId": { "Ref": "jjtechVPC" },
+        "CidrBlock": { "Ref": "jjtechPrvtSNcidr" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechPrvtSN" }]
+      }
+    },
+    "jjtechPrvtRT": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": { "Ref": "jjtechVPC" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechPrvtRT" }]
+      }
+    },
+    "jjtechPubRT": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": { "Ref": "jjtechVPC" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechPubRT" }]
+      }
+    },
+    "jjtechPrvtRTAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "jjtechPrvtSN" },
+        "RouteTableId": { "Ref": "jjtechPrvtRT" }
+      }
+    },
+    "jjtechPubRTAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "SubnetId": { "Ref": "jjtechPubSN" },
+        "RouteTableId": { "Ref": "jjtechPubRT" }
+      }
+    },
+    "jjtechPubRoute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "RouteTableId": { "Ref": "jjtechPubRT" },
+        "DestinationCidrBlock": { "Ref": "jjtechPubRTrouteDestinationCidrBlock" },
+        "GatewayId": { "Ref": "jjtechIGW" }
+      }
+    },
+    "jjtechWebServerSG" : {
+      "Type" : "AWS::EC2::SecurityGroup",
+      "Properties" : {
+        "GroupDescription" : "jjtechWebServerSG",
+        "SecurityGroupIngress" : [
+          {
+            "IpProtocol" : "tcp",
+            "FromPort" : "80",
+            "ToPort" : "80",
+            "CidrIp" : "0.0.0.0/0"
+          },
+            {
+              "IpProtocol" : "tcp",
+              "FromPort" : "443",
+              "ToPort" : "443",
+              "CidrIp" : "0.0.0.0/0"
+            }
+        ],
+
+            "VpcId" : { "Ref": "jjtechVPC" },
+            "Tags" :  [{ "Key": "Name", "Value":  "jjtechWebServerSG" }]
+          }
+        },
+        "jjtechWebServerEC2": {
+            "Type": "AWS::EC2::Instance",
+            "Properties": {
+                "KeyName": "Nova-KP",
+                "ImageId": "ami-0cff7528ff583bf9a",
+                "InstanceType": { "Ref": "jjtechEC2InstanceTypePARA" },
+                "Monitoring": "true",
+                "NetworkInterfaces":[
+                  {
+                  "AssociatePublicIpAddress": "true",
+                  "DeviceIndex": "0",
+                  "GroupSet": [{ "Ref": "jjtechWebServerSG" }],
+                  "SubnetId": { "Ref": "jjtechPubSN" }
+                }
+              ]
+            },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": "jjtechWebServerEC2"
+                    }
+                ],
+                "UserData": {
+                    "Fn::Base64": {
+                        "Fn::Join": [
+                            "",
+                            [
+                                "#!/bin/bash -ex",
+                                "-"
+                            ]
+                        ]
+                    }
+                }
+              }
+            },
+      "Outputs": {
+
+  }
+}
