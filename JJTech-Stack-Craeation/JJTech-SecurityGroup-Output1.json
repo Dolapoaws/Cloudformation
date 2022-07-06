@@ -5,6 +5,14 @@
   "Parameters": {
     "VPCId" : {
             "Type" : "String"
+        },
+        "WebServersSecurityGroupPARA": {
+            "Description": "provide WebServersSecurityGroup port",
+            "Type": "String"
+        },
+        "AppServersSecurityGroupPARA": {
+            "Description": "provide AppServerSecurityGroup port",
+            "Type": "String"
         }
   },
   "Mappings": {},

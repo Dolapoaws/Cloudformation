@@ -1,0 +1,42 @@
+[
+  {
+    "parameterKey": "jjtechVPCCIDR",
+    "parameterValue": "10.1.0.0/16"
+    },
+  {
+    "parameterKey": "jjtechPrivateSubnetCIDR",
+    "parameterValue": "10.1.1.0/24"
+    },
+  {
+    "parameterKey": "jjtechPrivateSUbnetAZ",
+    "parameterValue": "us-east-1a"
+    },
+  {
+    "parameterKey": "jjtechPublicSubnetCIDR",
+    "parameterValue": "10.1.2.0/24"
+    },
+  {
+    "parameterKey": "jjtechPublicSubnetAZ",
+    "parameterValue": "us-east-1b"
+    },
+  {
+    "parameterKey": "jjtechVEC2InstanceTYPE",
+    "parameterValue": "t2.micro"
+    },
+  {
+    "parameterKey": "jjtechWebserverKEYPAIR",
+    "parameterValue": ""
+    },
+  {
+    "parameterKey": "jjtechAppserverKEYPAIR",
+    "parameterValue": ""
+    },
+  {
+    "parameterKey": "jjtechWebserverEC2ImageID",
+    "parameterValue": ""
+    },
+  {
+    "parameterKey": "jjtechAppserverEC2ImageID",
+    "parameterValue": ""
+    }
+  ]
