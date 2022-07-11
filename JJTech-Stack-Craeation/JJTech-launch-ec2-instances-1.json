@@ -4,11 +4,11 @@
   "Metadata": {},
   "Parameters": {
     "Subnet1": {
-      "Description": "Choose Cidr for Subnet1",
+      "Description": "Choose Subnet ID for Subnet1",
       "Type": "String"
     },
     "Subnet2": {
-      "Description": "Choose AZ for Subnet1",
+      "Description": "Choose Subnet ID for Subnet2",
       "Type": "String"
     },
     "WebserverKeyName": {

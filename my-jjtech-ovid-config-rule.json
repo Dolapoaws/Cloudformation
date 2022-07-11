@@ -1,0 +1,116 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+
+    "Parameters": {
+      "EnvironmentName": {
+          "Description": "Environment Name",
+          "Type": "String",
+          "AllowedValues": [
+            "Dev",
+            "PreProd",
+            "Prod"
+          ],
+          "COnstraintDescription": "Environment must match with specified allowed value"
+        }
+      },
+      "Resources": {
+        "S3BucketPublicReadProhibited": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "S3BucketPublicReadProhibited",
+            "Description": "This AWS Config Rule checks and makes sure Amazon S3 Buckets do not allow public read access",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_PUBLIC_READ_PROHIBITED"
+            },
+            "MaximumExecutionFrequency": "Six_Hours"
+          }
+        },
+        "S3BucketPublicWriteProhibited": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "S3BucketPublicWriteProhibited",
+            "Description": "This AWS Config Rule checks and makes sure Amazon S3 Buckets do not allow public write access",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_PUBLIC_WRITE_PROHIBITED"
+            },
+            "MaximumExecutionFrequency": "Six_Hours"
+          }
+        },
+        "S3BucketSSLRequestsOnly": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "S3BucketSSLRequestsOnly",
+            "Description": "This AWS Config Rule checks whether S3 Buckets have policies that require requests to your s3 bucket",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_SSL_REQUESTS_ONLY"
+            }
+          }
+        },
+        "ServerSideEncryptionEnabled": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "ServerSideEncryptionEnabled",
+            "Description": "This AWS Config Rule checks that your amazon s3 bucket either has s3 default encryption",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Source": {
+              "Owner": "AWS",
+                "SourceIdentifier": "SERVER_SIDE_ENCRYPTION_ENABLED"
+            }
+          }
+        },
+        "S3BucketLoggingEnabled": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "S3BucketLoggingEnabled",
+            "Description": "This AWS Config Rule checks whether logging is enabled for your s3 bucket",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_LOGGING_ENABLED"
+            }
+          }
+        },
+        "S3BucketVersioningEnabled": {
+          "Type": "AWS::Config::ConfigRule",
+          "Properties": {
+            "ConfigRuleName": "S3BucketVersioningEnabled",
+            "Scope": {
+              "ComplianceResourceTypes": [
+                "AWS::S3::Bucket"
+              ]
+            },
+            "Description": "This AWS Config Rule checks whether versioning is enabled for your s3 bucket",
+            "Source": {
+              "Owner": "AWS",
+              "SourceIdentifier": "S3_BUCKET_VERSIONING_ENABLED"
+            }
+          }
+        }
+      }
+    }

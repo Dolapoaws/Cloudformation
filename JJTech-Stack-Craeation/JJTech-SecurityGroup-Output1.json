@@ -5,16 +5,8 @@
   "Parameters": {
     "VPCId" : {
             "Type" : "String"
-        },
-        "WebServersSecurityGroupPARA": {
-            "Description": "provide WebServersSecurityGroup port",
-            "Type": "String"
-        },
-        "AppServersSecurityGroupPARA": {
-            "Description": "provide AppServerSecurityGroup port",
-            "Type": "String"
         }
-  },
+      },
   "Mappings": {},
   "Conditions": {},
   "Resources": {
@@ -102,5 +94,20 @@
       }
     }
   },
-  "Outputs" : {}
-}
+  "Outputs" : {
+    "WebserverSG" : {
+      "Description" : "Print webserver security group",
+      "Value" : { "Ref": "WebServersSecurityGroup" },
+      "Export" : {
+        "Name" : "WebSecurityGroup"
+      }
+    },
+      "AppserverSG" : {
+        "Description" : "Print Appserver security group",
+        "Value" : { "Ref": "AppServersSecurityGroup" },
+        "Export" : {
+          "Name" : "AppSecurityGroup"
+        }
+      }
+    }
+  }

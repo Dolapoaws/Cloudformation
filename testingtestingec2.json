@@ -1,0 +1,78 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "",
+    "Metadata": {
+
+    },
+    "Parameters": {
+
+    },
+    "Mappings": {
+
+    },
+    "Conditions": {
+
+    },
+    "Resources": {
+      "jjtechWebServerEC2": {
+                  "Type": "AWS::EC2::Instance",
+                  "Properties": {
+                      "KeyName": "Nova-KP",
+                      "ImageId": "ami-0cff7528ff583bf9a",
+                      "InstanceType": { "Ref": "jjtechEC2InstanceTypePARA" },
+                      "Monitoring": "true",
+                      "NetworkInterfaces":[
+                        {
+                        "AssociatePublicIpAddress": "true",
+                        "DeviceIndex": "0",
+                        "GroupSet": [{ "Ref": "jjtechWebServerSG" }],
+                        "SubnetId": { "Ref": "jjtechPubSN" }
+                      }
+                    ]
+                  },
+                      "Tags": [
+                          {
+                              "Key": "Name",
+                              "Value": "jjtechWebServerEC2"
+                          }
+                      ],
+                      "UserData": {
+                          "Fn::Base64": {
+                              "Fn::Join": [
+                                  "",
+                                  [
+                                      "#!/bin/bash -ex",
+                                      "-"
+                                  ]
+                              ]
+                          }
+                      }
+                    }
+                  },
+      			"jjtechWebServerSG" : {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+              "GroupDescription" : "jjtechWebServerSG",
+              "SecurityGroupIngress" : [
+                {
+                  "IpProtocol" : "tcp",
+                  "FromPort" : "80",
+                  "ToPort" : "80",
+                  "CidrIp" : "0.0.0.0/0"
+                },
+                  {
+                    "IpProtocol" : "tcp",
+                    "FromPort" : "443",
+                    "ToPort" : "443",
+                    "CidrIp" : "0.0.0.0/0"
+                  }
+              ],
+
+                  "VpcId" : { "Ref": "jjtechVPC" },
+                  "Tags" :  [{ "Key": "Name", "Value":  "jjtechWebServerSG" }]
+                }
+              },
+    "Outputs": {
+
+    }
+}
