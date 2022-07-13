@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "This template provisions the network and web proxy infrastructure for the Ovid Application",
+  "Description": "",
   "Metadata": {
 
   },
@@ -16,8 +16,8 @@
         "ConstraintDescription": "Environment must match with specified AllowedValues",
         "Default": "Dev"
     },
-    "jjtechVPCCIDR": {
-          "Description": "provide cidr for your VPC",
+    "jjtechvpcCIDR": {
+          "Description": "vpc CidrBlock",
           "Type": "String"
         },
     "jjtechPubSNcidr": {
@@ -53,19 +53,8 @@
     "jjtechVPC": {
       "Type": "AWS::EC2::VPC",
       "Properties": {
-        "CidrBlock": { "Ref": "jjtechVPCCIDR" },
-        "Tags": [
-          { "Key": "LOB", "Value":  "ecommerce" },
-          { "Key": "owner", "Value":  "jjtechinc" },
-          { "Key": "budget code", "Value":  "2249" },
-          { "Key": "patch group", "Value":  "linux" },
-          { "Key": "Name", "Value":  "jjtechVPC" },
-          { "Key": "application id", "Value":  "OVID22JJ" },
-          { "Key": "project manager", "Value":  "Chilion Tabe" },
-          { "Key": "compliance classification", "Value":  "PCI" },
-          { "Key": "environment", "Value":  "dev, preprod, prod" },
-          { "Key": "data classification", "Value":  "classified" },
-          { "Key": "project name", "Value":  "ovid application deployment" }
+        "CidrBlock": { "Ref": "jjtechvpcCIDR" },
+        "Tags": [{ "Key": "Name", "Value":  "jjtechVPC" }
         ]
       }
     },
